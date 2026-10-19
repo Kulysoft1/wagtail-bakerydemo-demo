@@ -31,7 +31,7 @@ This demo is aimed primarily at developers wanting to learn more about the inter
 
 # Deployment to Render or Railway
 
-This repo is deployment-ready. See [DEPLOYMENT.md](DEPLOYMENT.md) for full instructions,
+This repo is deployment-ready. See the [deployment guide](docs/DEPLOYMENT.md) for full instructions,
 including a one-click Render Blueprint (`render.yaml`) and Railway (Dockerfile + `railway.json`)
 steps.
 

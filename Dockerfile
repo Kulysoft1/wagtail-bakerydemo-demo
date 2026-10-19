@@ -65,8 +65,8 @@ RUN DATABASE_URL=postgres://none REDIS_URL=none python manage.py collectstatic -
 RUN mkdir -p /code/bakerydemo/media/images && mkdir -p /code/bakerydemo/media/original_images && chown -R 1000:2000 /code/bakerydemo/media
 # Note: if you deploy with the Render Blueprint or Railway configs in this repo, media
 # is ephemeral by default. Mount a disk/volume at /code/bakerydemo/media to persist
-# uploads - see DEPLOYMENT.md. (No anonymous VOLUME mount is declared here, as that
-# would shadow the platform-managed disk at the same path.)
+# uploads - see docs/DEPLOYMENT.md. (No anonymous VOLUME mount is declared here, as
+# that would shadow the platform-managed disk at the same path.)
 
 # start uWSGI, using a wrapper script to allow us to easily add more commands to container startup:
 ENTRYPOINT ["/code/docker-entrypoint.sh"]
