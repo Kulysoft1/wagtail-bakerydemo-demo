@@ -61,11 +61,12 @@ ENV DJANGO_SETTINGS_MODULE=bakerydemo.settings.production DJANGO_DEBUG=off
 # Call collectstatic with dummy environment variables:
 RUN DATABASE_URL=postgres://none REDIS_URL=none python manage.py collectstatic --noinput
 
-# make sure static files are writable by uWSGI process
+# make sure media files are writable by uWSGI process
 RUN mkdir -p /code/bakerydemo/media/images && mkdir -p /code/bakerydemo/media/original_images && chown -R 1000:2000 /code/bakerydemo/media
-
-# mark the destination for images as a volume
-VOLUME ["/code/bakerydemo/media/images/"]
+# Note: if you deploy with the Render Blueprint or Railway configs in this repo, media
+# is ephemeral by default. Mount a disk/volume at /code/bakerydemo/media to persist
+# uploads - see DEPLOYMENT.md. (No anonymous VOLUME mount is declared here, as that
+# would shadow the platform-managed disk at the same path.)
 
 # start uWSGI, using a wrapper script to allow us to easily add more commands to container startup:
 ENTRYPOINT ["/code/docker-entrypoint.sh"]

@@ -1,0 +1,42 @@
+# Render Blueprint for the Wagtail bakerydemo demo site.
+#
+# Creates:
+#   1. A web service building this repo with the Dockerfile (uWSGI listens on $PORT).
+#   2. A Render Postgres database, injected into the app as DATABASE_URL.
+#
+# Read the docs for the full Blueprint spec:
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: bakerydemo
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # free: 512 MB RAM, HTTP listener, spins down after 15 minutes without traffic.
+    # starter: always-on. Change to taste after the first deploy.
+    plan: free
+    autoDeploy: true
+    # uWSGI takes a few seconds to come up after migrations; Render will wait for
+    # this path to return a 2xx/3xx before marking the deploy healthy.
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bakerydemo-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      # Accepts <host>, <host>, subdomain wildcards (.example.com) and "*".
+      # "*" is fine for a throwaway demo; tighten for anything shared.
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "*"
+      # Loads the full demo content (pages, users, media) on the first boot only.
+      - key: DJANGO_LOAD_INITIAL_DATA
+        value: "on"
+
+databases:
+  - name: bakerydemo-db
+    databaseName: bakerydemo
+    user: bakerydemo
+    # Free Postgres expires after 30 days - upgrade the database plan before then.
+    # This is separate from the web service instance type.
+    plan: free
