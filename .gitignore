@@ -1,26 +1,112 @@
-.DS_Store
-*.pyc
-*.log
-*.swp
-*.retry
-.env
-.idea
-.vscode
-*~
-/logs
-/data
-.~*
-common/CACHE
-bakerydemo/settings/local.py
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Packaging / build artifacts
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing and coverage
+.pytest_cache/
+.tox/
+.nox/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.cover
+.cache/
+
+# Type checkers / linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# ---------------------------------------------------------------------------
+# Django
+# ---------------------------------------------------------------------------
+# Local database files (default SQLite DB is bakerydemodb)
 bakerydemodb
 *.db
-node_modules
-venv
-.venv
-__pycache__
+*.sqlite
+*.sqlite3
+db.sqlite3
+
+# Local overrides and environment
+.env
+.env.*
+!.env.example
+bakerydemo/settings/local.py
+local_settings.py
+
+# Collected static files and uploaded media
+/bakerydemo/collect_static/
+staticfiles/
+/media/
+/data/
+
+# Logs and caches
+*.log
+/logs/
+/bakerydemo/cache/
+common/CACHE
+
+# ---------------------------------------------------------------------------
+# Frontend / Node
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.stylelintcache
+.eslintcache
+
+# ---------------------------------------------------------------------------
+# Editors and OS
+# ---------------------------------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.~*
+
+# ---------------------------------------------------------------------------
+# Vagrant
+# ---------------------------------------------------------------------------
 .vagrant/
 /.vagrant/
 /Vagrantfile.local
-/bakerydemo/cache
-!.gitignore
-bakerydemo/collect_static
