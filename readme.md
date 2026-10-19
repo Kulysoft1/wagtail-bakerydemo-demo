@@ -31,16 +31,17 @@ This demo is aimed primarily at developers wanting to learn more about the inter
 
 # Deployment to Render or Railway
 
-This repo is deployment-ready. See the [deployment guide](docs/DEPLOYMENT.md) for full instructions,
+This repo is deployment-ready. See the [docs index](docs/README.md) for full instructions,
 including a one-click Render Blueprint (`render.yaml`) and Railway (Dockerfile + `railway.json`)
 steps.
 
 In short:
 
 - **Render** - Dashboard → *New → Blueprint* → select your fork/repo. `render.yaml` creates the web
-  service and a Postgres database with all environment variables wired up.
+  service and a Postgres database with all environment variables wired up. ([guide](docs/DEPLOY_RENDER.md))
 - **Railway** - Dashboard → *New Project → Deploy from GitHub repo* (Dockerfile auto-detected), add a
-  PostgreSQL database, reference it as `DATABASE_URL=${{Postgres.DATABASE_URL}}`, then generate a domain.
+  PostgreSQL database, reference it as `DATABASE_URL=${{Postgres.DATABASE_URL}}`, then generate a
+  domain. ([guide](docs/DEPLOY_RAILWAY.md))
 - The first deploy migrates the database and loads the full demo content once (`DJANGO_LOAD_INITIAL_DATA=on`).
 - Log into the Wagtail admin at `/admin/` with the demo user `admin / changeme` (change this).
 
@@ -194,7 +195,7 @@ After experimenting with the demo, you may want to create your own site. To do t
 
 # Contributing
 
-Check out our [contributing documentation](contributing.md) for our contributing guidelines and docs for common tasks.
+Check out our [contributing documentation](CONTRIBUTING.md) for our contributing guidelines and docs for common tasks.
 
 # Other notes
 
