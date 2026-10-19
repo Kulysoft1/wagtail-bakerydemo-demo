@@ -32,14 +32,16 @@ This demo is aimed primarily at developers wanting to learn more about the inter
 # Deployment to Render or Railway
 
 This repo is deployment-ready. See the [docs index](docs/README.md) for full instructions,
-including free-tier walkthroughs for Render (dashboard-only, no Blueprint) and Railway
+including free-tier walkthroughs for Render (one-click Blueprint `render.yaml` — supported on the
+free tier with a one-database limit — or manual dashboard flow) and Railway
 (Dockerfile + `railway.json`).
 
 In short:
 
-- **Render** - Dashboard → *New → Postgres* (free plan), then *New → Web Service* → Docker
-  runtime with `DATABASE_URL`, `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS=*` and
-  `DJANGO_LOAD_INITIAL_DATA=on`. Free accounts cannot use the optional `render.yaml` Blueprint.
+- **Render** - Dashboard → *New → Blueprint* → pick your repo → **Apply** (one-click; free tier
+  supports Blueprints but allows only one free Postgres per workspace, so delete any existing one
+  first). Or create the free Postgres and Docker web service manually with `DATABASE_URL`,
+  `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS=*` and `DJANGO_LOAD_INITIAL_DATA=on`.
   ([guide](docs/DEPLOY_RENDER.md))
 - **Railway** - Trial/Free plan: *New Project → Deploy from GitHub repo* (Dockerfile
   auto-detected), add PostgreSQL, reference it as `DATABASE_URL=${{Postgres.DATABASE_URL}}`, then

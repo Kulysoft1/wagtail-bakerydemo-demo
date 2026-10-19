@@ -6,7 +6,7 @@ This repo ships with everything needed to deploy the Wagtail bakery demo as-is:
 |----------------------------------------|------------------------------|
 | Docker image (Python 3.12, uWSGI, static + media serving) | `Dockerfile`, `etc/uwsgi.ini` |
 | Production settings (reads everything from env vars)      | `bakerydemo/settings/production.py` |
-| Render Blueprint (optional; not available on free accounts) | `render.yaml`                          |
+| Render Blueprint (web service + Postgres; supported on free tier, one database limit) | `render.yaml`                          |
 | Railway config (Dockerfile build)                         | `railway.json`                         |
 | Wait-for-DB, migrate, seed demo data once                 | `docker-entrypoint.sh`                 |
 
@@ -44,7 +44,7 @@ git fetch upstream && git merge upstream/main
 
 | Platform | Approach | Guide |
 |----------|----------|-------|
-| **Render** | Manual dashboard flow: free Postgres + Docker web service (Blueprint optional, but not available on free accounts) | [DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
+| **Render** | Blueprint (`render.yaml`) provisions the free web service + free Postgres in one click; or create them manually via the dashboard | [DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
 | **Railway** | Dockerfile build + Postgres service referenced as a variable (Trial or Free plan credit) | [DEPLOY_RAILWAY.md](DEPLOY_RAILWAY.md) |
 
 Both platforms produce the same result — a Dockerized app, a managed Postgres, and the demo site
@@ -55,8 +55,9 @@ seeded on first boot — but the free tiers are very different:
 - **Railway** is credit-based. The one-time trial credit covers a short demo; the Free plan's
   $1/month is not enough for an always-on app plus Postgres.
 
-The per-platform guides assume a free account and do not rely on Blueprints or other
-infrastructure-as-code features.
+The per-platform guides assume a free account. Render's free tier supports Blueprints but is
+limited to one free Postgres database per workspace, which `render.yaml` respects; delete any
+existing free Postgres before applying it.
 
 ---
 
