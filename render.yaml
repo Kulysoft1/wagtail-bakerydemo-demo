@@ -1,5 +1,9 @@
 # Render Blueprint for the Wagtail bakerydemo demo site.
 #
+# NOTE: Free Render accounts do not include Blueprint access. If you are on a
+# free account, follow docs/DEPLOY_RENDER.md and create the Postgres database
+# and web service manually; this file is for workspaces with Blueprint access.
+#
 # Creates:
 #   1. A web service building this repo with the Dockerfile (uWSGI listens on $PORT).
 #   2. A Render Postgres database, injected into the app as DATABASE_URL.

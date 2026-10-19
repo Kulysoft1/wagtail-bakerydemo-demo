@@ -6,7 +6,7 @@ This repo ships with everything needed to deploy the Wagtail bakery demo as-is:
 |----------------------------------------|------------------------------|
 | Docker image (Python 3.12, uWSGI, static + media serving) | `Dockerfile`, `etc/uwsgi.ini` |
 | Production settings (reads everything from env vars)      | `bakerydemo/settings/production.py` |
-| Render Blueprint (web service + Postgres)                 | `render.yaml`                          |
+| Render Blueprint (optional; not available on free accounts) | `render.yaml`                          |
 | Railway config (Dockerfile build)                         | `railway.json`                         |
 | Wait-for-DB, migrate, seed demo data once                 | `docker-entrypoint.sh`                 |
 
@@ -44,11 +44,19 @@ git fetch upstream && git merge upstream/main
 
 | Platform | Approach | Guide |
 |----------|----------|-------|
-| **Render** | Blueprint: `render.yaml` provisions the web service + Postgres in one click | [DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
-| **Railway** | Dockerfile build + Postgres service referenced as a variable | [DEPLOY_RAILWAY.md](DEPLOY_RAILWAY.md) |
+| **Render** | Manual dashboard flow: free Postgres + Docker web service (Blueprint optional, but not available on free accounts) | [DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
+| **Railway** | Dockerfile build + Postgres service referenced as a variable (Trial or Free plan credit) | [DEPLOY_RAILWAY.md](DEPLOY_RAILWAY.md) |
 
 Both platforms produce the same result — a Dockerized app, a managed Postgres, and the demo site
-seeded on first boot.
+seeded on first boot — but the free tiers are very different:
+
+- **Render** has ongoing free compute and a free database. The web service sleeps when idle, and
+  the free database expires after 30 days.
+- **Railway** is credit-based. The one-time trial credit covers a short demo; the Free plan's
+  $1/month is not enough for an always-on app plus Postgres.
+
+The per-platform guides assume a free account and do not rely on Blueprints or other
+infrastructure-as-code features.
 
 ---
 
@@ -65,7 +73,8 @@ To persist uploads:
 
 ### Render: persistent disk
 
-Web service → *Settings → Disks* → add a Disk (Starter plan+, e.g. 1 GB) with **Mount path**
+Free web services cannot attach a disk. On a paid instance type, go to *Settings → Disks* → add a
+Disk (Starter plan+, e.g. 1 GB) with **Mount path**
 
 ```
 /code/bakerydemo/media
@@ -80,6 +89,9 @@ App service → *Volumes* (or Settings → Volumes) → *New Volume* with **Moun
 ```
 /code/bakerydemo/media
 ```
+
+The Trial and Free plans cap each volume at 500 MB (the Free plan allows one volume). That is
+plenty for the demo's ~9 MB of seeded media but not for a large upload library.
 
 ### S3 / object storage (optional, both platforms)
 
@@ -114,9 +126,10 @@ enables `django-redis` for cache/renditions.
 | Render deploys but "502" or long startup                     | Free instance waking up after inactivity; wait ~1 minute.                                                    |
 | `DisallowedHost at /` / admin POST gives CSRF error          | Set `DJANGO_ALLOWED_HOSTS` to your real hostname (comma separated), or leave `*` for a throwaway demo           |
 | Logs show `Missing staticfiles manifest entry`               | Static is collected at image build time — a rebuild fixes it (`Deploy latest`).                              |
-| `relation "..." does not exist`                              | Migrations somehow skipped. One-off shell: Render *Shell* (paid instances), or on Railway connect a local `railway run python manage.py migrate` using the database's public `DATABASE_URL`. |
+| `relation "..." does not exist`                              | Migrations somehow skipped. Free Render services have no Shell and Railway's Free plan is credit-limited: run migrations from a local checkout against the database's public/external `DATABASE_URL` (`python manage.py migrate`), or use `railway run python manage.py migrate` on Railway. |
 | Nothing but a blank home page                                | Set `DJANGO_LOAD_INITIAL_DATA=on` and redeploy with an empty database (drop the Postgres or start a new project) |
-| Change the demo admin password                               | Admin UI → Users → admin, or one-off shell: `python manage.py reset_admin_password` (uses `ADMIN_PASSWORD` env) |
+| Render database suddenly unreachable after ~30 days           | The free Postgres expired. Upgrade it to a paid plan within the 14-day grace period, or restore a dump into a fresh free database. |
+| Change the demo admin password                               | Admin UI → Users → admin, or from a local checkout with `DATABASE_URL` set: `ADMIN_PASSWORD='<new>' python manage.py reset_admin_password` |
 
 ---
 
@@ -125,7 +138,8 @@ enables `django-redis` for cache/renditions.
 The deployment is intentionally demo-friendly:
 
 - `DJANGO_ALLOWED_HOSTS=*` → set it to your real hostname(s).
-- Add a database backup schedule on Render / enable Postgres point-in-time restore on Railway.
+- Free databases have no backups (and Render's free database expires after 30 days). Before storing
+  real data, move to a paid database plan and add a backup schedule / point-in-time restore.
 - Rotate `DJANGO_SECRET_KEY` (on Render: *Environment → Change value*).
 - Set `PRIMARY_HOST=<yourdomain>` so Wagtail's notification emails build correct URLs.
 - `heroku.yml` / `Procfile` (Heroku deployment path) is untouched if you need it later.

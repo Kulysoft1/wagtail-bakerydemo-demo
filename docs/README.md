@@ -2,9 +2,9 @@
 
 | Document | Covers |
 |----------|--------|
-| [DEPLOYMENT.md](DEPLOYMENT.md) | Shared overview: what the deployment stack includes, publishing the repo, and everything common to both platforms — media persistence (disk / volume / S3), Redis, troubleshooting, hardening |
-| [DEPLOY_RENDER.md](DEPLOY_RENDER.md) | Deploying to **Render**: one-click Blueprint, dashboard flow, environment variables, free-tier limits |
-| [DEPLOY_RAILWAY.md](DEPLOY_RAILWAY.md) | Deploying to **Railway**: CLI (`railway up`) and dashboard flows, reference variables, networking |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Shared overview: what the deployment stack includes, publishing the repo, and everything common to both platforms — media persistence (disk / volume / S3), Redis, troubleshooting, hardening, free-tier trade-offs |
+| [DEPLOY_RENDER.md](DEPLOY_RENDER.md) | Deploying to **Render** on a free account: dashboard-only setup (no Blueprint), Postgres + Docker web service, environment variables, free-tier limits |
+| [DEPLOY_RAILWAY.md](DEPLOY_RAILWAY.md) | Deploying to **Railway** on the Trial or Free plan: CLI (`railway up`) and dashboard flows, reference variables, credit limits |
 | [../readme.md](../readme.md) | Project overview and local setup (venv, Docker, Vagrant) |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Making changes, linting/testing, exporting fixtures |
 
